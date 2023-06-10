@@ -5,6 +5,7 @@ const bcrypt=require("bcryptjs")
 const jwt=require("jsonwebtoken")
 const {JWT_KEY} =require("../keys")
 const auth=require("../middleware/auth")
+const PostController=require("../controllers/PostController")
 router.get("/",(req,res)=>{
     console.log("Home page")
 })
@@ -74,4 +75,9 @@ router.post("/signin", (req,res)=>{
         })
     })
 })
+
+router.post("/createpost",auth,PostController.CreatePost)
+router.get("/allposts",auth, PostController.getallPosts)
+router.get("/myposts",auth,PostController.getmyposts)
+
 module.exports=router;
