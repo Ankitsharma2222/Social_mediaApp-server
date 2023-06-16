@@ -24,7 +24,7 @@ router.post("/signup",(req,res)=>{
     User.findOne({email:email})
     .then((savedUser)=>{
         if(savedUser){
-            return res.status(422).json({message:"User is already registered"})
+            return res.status(422).json({error:"User is already registered"})
         }
             bcrypt.hash(password,12)
             .then((hashedpassword)=>{
@@ -38,14 +38,14 @@ router.post("/signup",(req,res)=>{
                     res.status(200).json({message:"SignUp completed"})
                 })
                 .catch((err)=>{
-                    console.log("Error h bhai" , err);
+                    console.log("Error h bro " , err);
                 })
             })
 
         
     })
     .catch((err)=>{
-        console.log("Error h bro" ,err);
+        console.log("Error h bhai " ,err);
     })
 })
 
@@ -54,6 +54,7 @@ router.post("/signin", (req,res)=>{
     if( !email || !password){
         return res.status(422).json({message:"Please enter the all fields"})
     }
+
     User.findOne({email :email})
     .then((user)=>{
         if(!user){
@@ -64,20 +65,25 @@ router.post("/signin", (req,res)=>{
             if(ismatched){
                 // return res.status(200).json({message:"Yup signin successful"})
                 const token=jwt.sign({_id:user._id},JWT_KEY);
-                res.json(token)
+                const {_id,name,email}=user
+                return res.json({token ,user:{_id,name,email}})
             }
             else{
-                return res.status(404).json({message:"Email or Password is incorrect"})
+                return res.status(404).json({error:"Email or Password is incorrect"})
             }
         })
         .catch((err)=>{
             console.log("Error in signin" ,err);
         })
     })
+ 
 })
 
 router.post("/createpost",auth,PostController.CreatePost)
 router.get("/allposts",auth, PostController.getallPosts)
 router.get("/myposts",auth,PostController.getmyposts)
-
+router.put("/like",auth,PostController.like)
+router.put("/unlike",auth,PostController.unlike)
+router.put("/comment",auth,PostController.comment)
+router.delete("/deletepost/:postId",auth ,PostController.deletePost)
 module.exports=router;
