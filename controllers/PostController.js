@@ -28,7 +28,30 @@ module.exports.getallPosts=(req,res)=>{
     .populate("postedBy", "_id name")
     .populate("comments.commentBy","_id name")
     .then((posts)=>{
-        return res.json({posts})
+        if(posts){
+            return res.json({posts})
+        }
+        else{
+            return res.json("No posts")
+        }
+    })
+    .catch((err)=>{
+        console.log("error h post fetching me" , err);
+    })
+}
+
+
+module.exports.myfollowingsPosts=(req,res)=>{
+    Post.find({postedBy:{$in:req.user.following}})
+    .populate("postedBy", "_id name")
+    .populate("comments.commentBy","_id name")
+    .then((posts)=>{
+        if(posts){
+            return res.json({posts})
+        }
+        else{
+            return res.json("No posts")
+        }
     })
     .catch((err)=>{
         console.log("error h post fetching me" , err);
