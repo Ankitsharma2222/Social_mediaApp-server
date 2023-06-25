@@ -95,5 +95,5 @@ router.get("/getUser/:id" ,auth ,UserController.getUser)
 router.put("/unfollow",auth,UserController.unfollow)
 router.put("/follow",auth,UserController.follow)
 router.get("/myfollowingsposts" ,auth ,PostController.myfollowingsPosts)
-
+router.put("/updateDp",auth,UserController.updatedp)
 module.exports=router;

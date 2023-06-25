@@ -71,3 +71,13 @@ module.exports.follow =(req,res)=>{
     })
     
 }
+
+module.exports.updatedp=(req,res)=>{
+    User.findByIdAndUpdate(req.user._id,{$set:{profilePic:req.body.profilePic}},{new:true})
+    .then((result)=>{
+        res.json(result);
+    })
+    .catch((err)=>{
+        console.log("error in updating profile" ,err)
+    })
+}
